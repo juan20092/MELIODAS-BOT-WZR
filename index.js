@@ -25,6 +25,7 @@ DisconnectReason
 
 import { makeWASocket } from './wzr/simple.js'
 import store from './wzr/store.js'
+import { logMessages } from './wzr/logger.js'
 import { handler } from './handler.js'
 
 
