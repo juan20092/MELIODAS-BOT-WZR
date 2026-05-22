@@ -23,7 +23,8 @@ Browsers,
 DisconnectReason
 } from '@whiskeysockets/baileys'
 
-import store from './lib/store.js'
+import { makeWASocket } from './wzr/simple.js'
+import store from './wzr/store.js'
 import { handler } from './handler.js'
 
 
