@@ -76,6 +76,8 @@ return await store.loadMessage(jid, key.id)?.message || ''
 
 })
 
+logMessages(global.conn)
+  
 store.bind(global.conn.ev)
 
 global.conn.ev.on('messages.upsert', async (m) => {
