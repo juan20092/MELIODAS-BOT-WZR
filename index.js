@@ -82,7 +82,7 @@ async function showBanner() {
   console.log(chalk.bold.cyanBright(boxen(
     chalk.bold('¡Bienvenido!\n') +
     chalk.hex('#00eaff')('El bot está arrancando, por favor espera...') +
-    '\n' + tips.join('\n'),
+    '\n',
     { padding: 1, margin: 1, borderStyle: 'round', borderColor: 'yellow' }
   )))
 
@@ -153,7 +153,6 @@ global.reloadHandler = async function (restatConn = false) {
   } catch (e) { console.error(e) }
 
   if (restatConn) {
-    const oldChats = global.conn.chats
     try { global.conn.ws.close() } catch {}
     global.conn.ev.removeAllListeners()
     global.conn = makeWASocket(connectionOptions)
@@ -212,7 +211,7 @@ if (!methodCodeQR && !methodCode && !existsSync(`${sessionsDir}/creds.json`)) {
 const connectionOptions = {
   logger: pino({ level: 'silent' }),
   printQRInTerminal: opcion === '1',
-  browser: Browsers.macOS('Desktop'),
+  browser: ['Ubuntu', 'Chrome', '20.0.0'],
   auth: {
     creds: state.creds,
     keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'fatal' }))
@@ -231,7 +230,8 @@ global.conn = makeWASocket(connectionOptions)
 store.bind(global.conn)
 logMessages(global.conn)
 
-// Pairing code
+await global.reloadHandler()
+
 if (opcion === '2' && !global.conn.authState.creds.registered) {
   let phoneNumber = global.botNumber || ''
 
@@ -249,14 +249,18 @@ if (opcion === '2' && !global.conn.authState.creds.registered) {
   phoneNumber = phoneNumber.replace(/\D/g, '')
 
   setTimeout(async () => {
-    let code = await global.conn.requestPairingCode(phoneNumber)
-    code = code?.match(/.{1,4}/g)?.join('-') || code
-    console.log(chalk.bold.magenta(
-      '\n╭─────────────────────────────◉\n' +
-      '│ � CÓDIGO DE VINCULACIÓN\n' +
-      `│ ${chalk.bold.red(code)}\n` +
-      '╰─────────────────────────────◉\n'
-    ))
+    try {
+      let code = await global.conn.requestPairingCode(phoneNumber)
+      code = code?.match(/.{1,4}/g)?.join('-') || code
+      console.log(chalk.bold.magenta(
+        '\n╭─────────────────────────────◉\n' +
+        '│ 🔑 CÓDIGO DE VINCULACIÓN\n' +
+        `│ ${chalk.bold.red(code)}\n` +
+        '╰─────────────────────────────◉\n'
+      ))
+    } catch (err) {
+      console.error(chalk.red('❌ Error:'), err)
+    }
   }, 3000)
 } else {
   rl.close()
@@ -300,8 +304,6 @@ async function connectionUpdate(update) {
   }
 }
 
-await global.reloadHandler()
-
 if (global.db) {
   setInterval(async () => {
     if (global.db?.data) await global.db.write().catch(console.error)
@@ -322,4 +324,5 @@ async function _quickTest() {
 }
 
 _quickTest().catch(console.error)
+
 
