@@ -1,3 +1,5 @@
+const { emitWarning: _ew } = process
+process.emitWarning = (w, ...a) => typeof w === 'string' && w.includes('NODE_TLS_REJECT_UNAUTHORIZED') ? void 0 : _ew.call(process, w, ...a)
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
 import './config.js'
@@ -28,6 +30,7 @@ import {
   DisconnectReason
 } from 'baileys'
 
+import qrcode from 'qrcode-terminal'
 import { makeWASocket, smsg } from './wzr/simple.js'
 import store from './wzr/store.js'
 import { logMessages } from './wzr/logger.js'
@@ -38,57 +41,78 @@ const { chain }  = lodash
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 async function showBanner() {
-  const lines = [
-    '░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░',
-    '▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄░░░░░░░░░░░░░░░░░',
-    '▄▀░░░░░░░░░░░░▄░░░░░░░▀▄░░░░░░░░░░░░░░',
-    '█░░▄░░░░▄░░░░░░░░░░░░░░█░░░░░░░░░░░░░░',
-    '█░░░░░░░░░░░░░░░█░░░░░░░░░░░░▄█▄▄░░▄░░',
-    '█░▄▄▄░░░░▄▄▄▄▄░░█░░░░░░▀░░░░▀█░░▀▄░░░',
-    '░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░',
-  ]
-  const title    = lines.map(l => chalk.hex('#ff00cc').bold(l)).join('\n')
-  const aiMsg    = chalk.hex('#ffb300').bold('BASE')
-  const subtitle = chalk.hex('#00eaff').bold('BASE BOT-MD')
-  
-  const frames = ['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏']
-    .map(f => chalk.magentaBright(`${f} Cargando módulos...`))
-
   console.clear()
-  console.log(boxen(title + '\n' + subtitle, {
-    padding: 1, margin: 1,
-    borderStyle: 'double', borderColor: 'whiteBright',
-    backgroundColor: 'black', title: 'BASE', titleAlignment: 'center'
+
+  const art = [
+    '██████╗  ██████╗ ████████╗   ███╗   ███╗██████╗ ',
+    '██╔══██╗██╔═══██╗╚══██╔══╝   ████╗ ████║██╔══██╗',
+    '██████╔╝██║   ██║   ██║      ██╔████╔██║██║  ██║',
+    '██╔══██╗██║   ██║   ██║      ██║╚██╔╝██║██║  ██║',
+    '██████╔╝╚██████╔╝   ██║      ██║ ╚═╝ ██║██████╔╝',
+    '╚═════╝  ╚═════╝    ╚═╝      ╚═╝     ╚═╝╚═════╝ ',
+  ]
+
+  const gradient = ['#ff00cc','#e000dd','#bb00ee','#8800ff','#5500ff','#00eaff']
+  const artColored = art.map((l, i) => chalk.hex(gradient[i]).bold(l)).join('\n')
+
+  console.log(boxen(artColored, {
+    padding: { top: 1, bottom: 1, left: 4, right: 4 },
+    margin: { top: 1, bottom: 0, left: 2, right: 2 },
+    borderStyle: 'double',
+    borderColor: 'magenta',
+    backgroundColor: '#0a0a0a',
+    title: chalk.hex('#ffb300').bold(' ✦ BASE BOT-MD ✦ '),
+    titleAlignment: 'center',
   }))
 
-  cfonts.say('BOT-MD', {
-    font: 'block', align: 'center',
-    colors: ['blue', 'cyan'], background: 'transparent',
-    letterSpacing: 1, lineHeight: 1
+  cfonts.say('BOT|MD', {
+    font: 'chrome', align: 'center',
+    colors: ['magenta', 'cyan', 'white'],
+    background: 'transparent',
+    letterSpacing: 2, lineHeight: 1,
+    space: false,
   })
+
   cfonts.say('powered by JUANWZR', {
     font: 'console', align: 'center',
-    colors: ['blue'], background: 'transparent'
+    colors: ['#ffb300'], background: 'transparent',
+    space: false,
   })
 
-  console.log('\n' + aiMsg + '\n')
+  const sparks  = ['#ff00cc','#ff44dd','#00eaff','#ffb300','#8800ff','#00eaff']
+  const symbols = ['◆','◇','✦','✧','◈','◉']
+  const bar = Array.from({ length: 46 }, (_, i) =>
+    chalk.hex(sparks[i % sparks.length])(symbols[i % symbols.length])
+  ).join('')
+  console.log('\n  ' + bar + '\n')
 
-  for (let i = 0; i < 18; i++) {
-    process.stdout.write('\r' + frames[i % frames.length])
-    await sleep(70)
+  const W = 44
+  const sep  = chalk.hex('#333333')('─'.repeat(W))
+  const col1 = (t) => chalk.hex('#888888')(t)
+  const col2 = (t) => chalk.hex('#00eaff').bold(t)
+  const col3 = (t) => chalk.hex('#ffb300').bold(t)
+
+  const infoLines = [
+    col1('  Versión   ') + col2('1.0.0') + '   ' + col1('Plataforma ') + col2('WhatsApp MD'),
+    col1('  Autor     ') + col3('JUANWZR')  + '   ' + col1('Estado     ') + chalk.greenBright.bold('Iniciando...'),
+  ]
+
+  console.log(chalk.hex('#444444')('  ╭' + '─'.repeat(W) + '╮'))
+  for (const l of infoLines) {
+    console.log(chalk.hex('#444444')('  │ ') + l)
+    console.log(chalk.hex('#444444')('  │ ') + sep)
   }
-  process.stdout.write('\r' + ' '.repeat(40) + '\r')
+  console.log(chalk.hex('#444444')('  ╰' + '─'.repeat(W) + '╯') + '\n')
 
-  console.log(chalk.bold.cyanBright(boxen(
-    chalk.bold('¡Bienvenido!\n') +
-    chalk.hex('#00eaff')('El bot está arrancando, por favor espera...') +
-    '\n',
-    { padding: 1, margin: 1, borderStyle: 'round', borderColor: 'yellow' }
-  )))
-
-  const sparkles = ['#ff00cc','#00eaff','#ffb300','#00eaff','#ff00cc','#ffb300']
-    .map(c => chalk.hex(c)('✦'))
-  console.log('\n' + Array.from({length: 30}, (_, i) => sparkles[i % sparkles.length]).join('') + '\n')
+  const spinFrames = ['⣾','⣽','⣻','⢿','⡿','⣟','⣯','⣷']
+  const spinColors = ['#ff00cc','#cc00ff','#8800ff','#00eaff','#00eaff','#8800ff','#cc00ff','#ff00cc']
+  for (let i = 0; i < 24; i++) {
+    const f = spinFrames[i % spinFrames.length]
+    const c = spinColors[i % spinColors.length]
+    process.stdout.write('\r  ' + chalk.hex(c).bold(f) + chalk.hex('#888888')('  Cargando sistema...'))
+    await sleep(60)
+  }
+  process.stdout.write('\r' + ' '.repeat(50) + '\r')
 }
 
 await showBanner()
@@ -108,16 +132,23 @@ if (!existsSync(pluginFolder)) mkdirSync(pluginFolder, { recursive: true })
 const pluginFilter = f => /\.js$/.test(f)
 
 async function filesInit() {
-  for (const filename of readdirSync(pluginFolder).filter(pluginFilter)) {
+  const files = readdirSync(pluginFolder).filter(pluginFilter)
+  if (!files.length) {
+    console.log(chalk.gray('  ⚠  No se encontraron plugins en /plugins'))
+    return
+  }
+  console.log(chalk.bold.blueBright('\n  ┌─ Cargando plugins ' + '─'.repeat(28)))
+  for (const filename of files) {
     try {
       const mod = await import(`file://${join(pluginFolder, filename)}`)
       global.plugins[filename] = mod.default || mod
-      console.log(chalk.green(`✔ Plugin: ${filename}`))
+      console.log(chalk.green(`  │  ✔  ${filename}`))
     } catch (e) {
-      console.error(chalk.red(`❌ Plugin error: ${filename}`))
-      console.error(e)
+      console.error(chalk.red(`  │  ✖  ${filename}`))
+      console.error(chalk.gray('  │     ' + String(e).split('\n')[0]))
     }
   }
+  console.log(chalk.bold.blueBright('  └' + '─'.repeat(38) + '\n'))
 }
 
 await filesInit()
@@ -126,18 +157,18 @@ const reloadPlugin = async (_, filename) => {
   if (!filename || !pluginFilter(filename)) return
   const dir = join(pluginFolder, filename)
   if (filename in global.plugins) {
-    if (existsSync(dir)) console.log(chalk.cyan(` ♻ updated plugin - '${filename}'`))
-    else { console.log(chalk.yellow(`🗑 deleted plugin - '${filename}'`)); return delete global.plugins[filename] }
+    if (existsSync(dir)) console.log(chalk.cyan(`  ♻  Plugin actualizado  › ${filename}`))
+    else { console.log(chalk.yellow(`  🗑  Plugin eliminado   › ${filename}`)); return delete global.plugins[filename] }
   } else {
-    console.log(chalk.green(`➕ new plugin - '${filename}'`))
+    console.log(chalk.green(`  ➕  Plugin nuevo       › ${filename}`))
   }
   const err = syntaxerror(readFileSync(dir), filename, { sourceType: 'module', allowAwaitOutsideFunction: true })
-  if (err) { console.error(`syntax error in '${filename}'\n${format(err)}`); return }
+  if (err) { console.error(chalk.red(`  ✖  Error de sintaxis en '${filename}'`) + '\n' + chalk.gray(format(err))); return }
   try {
     const mod = await import(`file://${dir}?update=${Date.now()}`)
     global.plugins[filename] = mod.default || mod
   } catch (e) {
-    console.error(`error loading plugin '${filename}'\n${format(e)}`)
+    console.error(chalk.red(`  ✖  Error al cargar '${filename}'`) + '\n' + chalk.gray(format(e)))
   }
   global.plugins = Object.fromEntries(Object.entries(global.plugins).sort(([a],[b]) => a.localeCompare(b)))
 }
@@ -210,7 +241,6 @@ if (!methodCodeQR && !methodCode && !existsSync(`${sessionsDir}/creds.json`)) {
 
 const connectionOptions = {
   logger: pino({ level: 'silent' }),
-  printQRInTerminal: opcion === '1',
   browser: ['Ubuntu', 'Chrome', '20.0.0'],
   auth: {
     creds: state.creds,
@@ -270,33 +300,42 @@ async function connectionUpdate(update) {
   const { connection, lastDisconnect, qr } = update
 
   if (qr && opcion === '1') {
-    console.log(chalk.bold.yellow('\n❐ ESCANEA EL QR — expira en 45 segundos'))
+    console.log(chalk.bold.yellow('\n  ┌─ QR ─────────────────────────────────────┐'))
+    console.log(chalk.yellow('  │  ❐  Escanea el código — expira en 45 s    │'))
+    console.log(chalk.bold.yellow('  └───────────────────────────────────────────┘\n'))
+    qrcode.generate(qr, { small: true })
   }
 
   if (connection === 'open') {
-    console.log(chalk.bold.green('\n✨ BOT CONECTADO ✨'))
+    console.log(
+      '\n' +
+      chalk.bold.green('  ╔══════════════════════════════════════════╗\n') +
+      chalk.bold.green('  ║') + chalk.bgGreen.black('        ✨  BOT CONECTADO EXITOSAMENTE  ✨      ') + chalk.bold.green('║\n') +
+      chalk.bold.green('  ╚══════════════════════════════════════════╝\n')
+    )
   }
 
   if (connection === 'close') {
     const reason = new Boom(lastDisconnect?.error)?.output?.statusCode
 
     const msgs = {
-      [DisconnectReason.badSession]:          chalk.cyanBright(`⚠ Sesión inválida. Borra ${sessionsDir} y reconecta.`),
-      [DisconnectReason.connectionClosed]:    chalk.magentaBright('⚠ Conexión cerrada, reconectando...'),
-      [DisconnectReason.connectionLost]:      chalk.blueBright('⚠ Conexión perdida, reconectando...'),
-      [DisconnectReason.connectionReplaced]:  chalk.yellowBright('⚠ Sesión reemplazada. Cierra la sesión anterior.'),
-      [DisconnectReason.loggedOut]:           chalk.redBright(`⚠ Sesión cerrada. Borra ${sessionsDir} y reconecta.`),
-      [DisconnectReason.restartRequired]:     chalk.cyanBright('✧ Reiniciando conexión...'),
-      [DisconnectReason.timedOut]:            chalk.yellowBright('⧖ Tiempo agotado, reconectando...'),
+      [DisconnectReason.badSession]:          chalk.cyanBright('  ⚠  Sesión inválida — borra /sessions y reconecta'),
+      [DisconnectReason.connectionClosed]:    chalk.magentaBright('  ⚠  Conexión cerrada — reconectando...'),
+      [DisconnectReason.connectionLost]:      chalk.blueBright('  ⚠  Conexión perdida — reconectando...'),
+      [DisconnectReason.connectionReplaced]:  chalk.yellowBright('  ⚠  Sesión reemplazada — cierra la sesión anterior'),
+      [DisconnectReason.loggedOut]:           chalk.redBright('  ⚠  Sesión cerrada — borra /sessions y reconecta'),
+      [DisconnectReason.restartRequired]:     chalk.cyanBright('  ✧  Reiniciando conexión...'),
+      [DisconnectReason.timedOut]:            chalk.yellowBright('  ⧖  Tiempo agotado — reconectando...'),
     }
 
-    console.log('\n' + (msgs[reason] || chalk.red(`⚠ Desconexión desconocida: ${reason}`)))
+    const msg = msgs[reason] || chalk.red(`  ⚠  Desconexión desconocida (código ${reason})`)
+    console.log('\n' + chalk.gray('  ─'.repeat(22)) + '\n' + msg + '\n' + chalk.gray('  ─'.repeat(22)) + '\n')
 
     if (reason === DisconnectReason.loggedOut || reason === DisconnectReason.badSession) return
     if (reason === DisconnectReason.connectionReplaced) return
 
     if (reason === 429) {
-      console.log(chalk.red('⚠ Rate limit. Esperando 30s...'))
+      console.log(chalk.red('  ⏳  Rate limit alcanzado — esperando 30 s...'))
       await sleep(30000)
     }
 
@@ -320,9 +359,9 @@ async function _quickTest() {
   ))
   global.support = Object.fromEntries(bins.map((b, i) => [b, results[i]]))
   Object.freeze(global.support)
-  console.log(chalk.gray('Support: ' + JSON.stringify(global.support)))
 }
 
 _quickTest().catch(console.error)
+
 
 
