@@ -28,7 +28,7 @@ import {
   jidNormalizedUser,
   Browsers,
   DisconnectReason
-} from 'baileys'
+} from '@whiskeysockets/baileys' 
 
 import qrcode from 'qrcode-terminal'
 import { makeWASocket, smsg } from './wzr/simple.js'
@@ -103,19 +103,10 @@ async function showBanner() {
     console.log(chalk.hex('#444444')('  │ ') + sep)
   }
   console.log(chalk.hex('#444444')('  ╰' + '─'.repeat(W) + '╯') + '\n')
-
-  const spinFrames = ['⣾','⣽','⣻','⢿','⡿','⣟','⣯','⣷']
-  const spinColors = ['#ff00cc','#cc00ff','#8800ff','#00eaff','#00eaff','#8800ff','#cc00ff','#ff00cc']
-  for (let i = 0; i < 24; i++) {
-    const f = spinFrames[i % spinFrames.length]
-    const c = spinColors[i % spinColors.length]
-    process.stdout.write('\r  ' + chalk.hex(c).bold(f) + chalk.hex('#888888')('  Cargando sistema...'))
-    await sleep(60)
-  }
-  process.stdout.write('\r' + ' '.repeat(50) + '\r')
 }
 
-await showBanner()
+
+showBanner()
 
 global.opts    = Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
 global.prefix  = new RegExp('^[#/!.]')
@@ -137,8 +128,11 @@ async function filesInit() {
     console.log(chalk.gray('  ⚠  No se encontraron plugins en /plugins'))
     return
   }
+  
   console.log(chalk.bold.blueBright('\n  ┌─ Cargando plugins ' + '─'.repeat(28)))
-  for (const filename of files) {
+  
+ 
+  await Promise.all(files.map(async (filename) => {
     try {
       const mod = await import(`file://${join(pluginFolder, filename)}`)
       global.plugins[filename] = mod.default || mod
@@ -147,7 +141,8 @@ async function filesInit() {
       console.error(chalk.red(`  │  ✖  ${filename}`))
       console.error(chalk.gray('  │     ' + String(e).split('\n')[0]))
     }
-  }
+  }))
+  
   console.log(chalk.bold.blueBright('  └' + '─'.repeat(38) + '\n'))
 }
 
@@ -241,13 +236,14 @@ if (!methodCodeQR && !methodCode && !existsSync(`${sessionsDir}/creds.json`)) {
 
 const connectionOptions = {
   logger: pino({ level: 'silent' }),
-  browser: ['Ubuntu', 'Chrome', '20.0.0'],
+  browser: Browsers.ubuntu('Chrome'), 
   auth: {
     creds: state.creds,
     keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'fatal' }))
   },
   markOnlineOnConnect: true,
-  generateHighQualityLinkPreview: true,
+  syncFullHistory: false, 
+  generateHighQualityLinkPreview: false, 
   msgRetryCounterCache,
   version,
   getMessage: async (key) => {
@@ -291,7 +287,7 @@ if (opcion === '2' && !global.conn.authState.creds.registered) {
     } catch (err) {
       console.error(chalk.red('❌ Error:'), err)
     }
-  }, 3000)
+  }, 1000)
 } else {
   rl.close()
 }
