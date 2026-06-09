@@ -113,7 +113,7 @@ let handler = async (m, { conn, text, args }) => {
             newsletterJid:
               global.ch || '120363419404216418@newsletter',
             newsletterName:
-              '♐︎ 𝖒𝖊𝖑𝖎𝖔𝖉𝖆𝖘 - 𝕮𝖍𝖆𝖓𝖓𝖊𝖑 ↯'
+              '𝘔𝘌𝘓𝘐𝘖𝘋𝘈𝘚 𝘉𝘖𝘛 - 𝘊𝘏𝘈𝘕𝘕𝘌𝘓 𝟮𝟬𝟮𝟯'
           }
         }
       },
@@ -136,7 +136,7 @@ let handler = async (m, { conn, text, args }) => {
             newsletterJid:
               global.ch || '120363419404216418@newsletter',
             newsletterName:
-              '♐︎ 𝖒𝖊𝖑𝖎𝖔𝖉𝖆𝖘 - 𝕮𝖍𝖆𝖓𝖓𝖊𝖑 ↯'
+              '𝘔𝘌𝘓𝘐𝘖𝘋𝘈𝘚 𝘉𝘖𝘛 - 𝘊𝘏𝘈𝘕𝘕𝘌𝘓 𝟮𝟬𝟮𝟯'
           }
         }
       },
