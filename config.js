@@ -2,9 +2,9 @@ import { fileURLToPath } from 'url'
 import path from 'path'
 
 // Configuración Básica del Bot
-global.botName = "prueba"
-global.packname = "prueba"
-global.author = "prueba"
+global.botName = "🐲 𝐌𝐄𝐋𝐈𝐎𝐃𝐀𝐒 𝐁𝐎𝐓 🐉"
+global.packname = "©️ 𝖏𝖚𝖆𝖓-𝖜𝖟 | 𝟤𝟢𝟤𝟧"
+global.author = "©️ 𝖏𝖚𝖆𝖓-𝖜𝖟 | 𝟤𝟢𝟤𝟧"
 
 
 global.owner = [
@@ -32,3 +32,4 @@ global.opts = {
   self: false,    
   noprefix: false 
 }
+
