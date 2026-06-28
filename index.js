@@ -169,8 +169,6 @@ async function filesInit() {
 
 await filesInit()
 
-await filesInit()
-
 async function updateFromGitHub() {
   exec('git pull', async (err, stdout) => {
     if (err) return
