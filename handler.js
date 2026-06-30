@@ -345,8 +345,8 @@ const imgUrl = "https://cdn.dix.lat/me/b0216efd-5f4a-4f5a-97bf-b62a81d10014.jpg"
 
 global.dfail = async (type, m, conn, command = "", usedPrefix = ".", user2 = "usuario") => {
   const msg = {
-    rowner: "> ╰➤ |𝐀𝐯𝐢𝐬𝐨| `𝐋𝐨 𝐬𝐢𝐞𝐧𝐭ο 𝐞𝐬𝐭𝐞 𝐜𝐨𝐦𝐚𝐧𝐝𝐨 𝐬𝐨𝐥𝐨 𝐞𝐬 𝐩𝐚𝐫𝐚 𝐦𝐢 𝐜𝐫𝐞𝐚𝐝𝐨𝐫`🚫",
-    owner: "> ╰➤ _ |𝐀𝐯𝐢𝐬𝐨| *` 𝙋𝙚𝙧𝙙𝙤𝙣 𝙨𝙤𝙡𝙤 𝙢𝙞𝙨 𝙘𝙧𝙚𝙖𝙙𝙤𝙧𝙚𝙨 𝙥𝙪𝙚𝙙𝙚𝙣 𝙪𝙨𝙖𝙧𝙡ο 😴.`*_",
+    rowner: "> ╰➤ |𝐀𝐯𝐢𝐬𝐨| `𝐋𝐨 𝐬𝐢𝐞𝐧𝐭𝐨 𝐞𝐬𝐭𝐞 𝐜𝐨𝐦𝐚𝐧𝐝𝐨 𝐬𝐨𝐥𝐨 𝐞𝐬 𝐩𝐚𝐫𝐚 𝐦𝐢 𝐜𝐫𝐞𝐚𝐝𝐨𝐫`🚫",
+    owner: "> ╰➤ _ |𝐀𝐯𝐢𝐬𝐨| *` 𝙋𝙚𝙧𝙙𝙤𝙣 𝙨𝙤𝙡ο 𝙢𝙞𝙨 𝙘𝙧𝙚𝙖𝙙𝙤𝙧𝙚𝙨 𝙥𝙪𝙚𝙙𝙚𝙣 𝙪𝙨𝙖𝙧𝙡ο 😴.`*_",
     mods: "> ╰➤ _*|𝐀𝐯𝐢𝐬𝐨| `𝐄𝐡 𝐥𝐨 𝐬𝐢𝐞𝐧𝐭𝐨 𝐞𝐬𝐭𝐨 𝐬𝐨𝐥𝐨 𝐞𝐬 𝐩𝐚𝐫𝐚 𝐥𝐨𝐬 𝐦𝐨𝐝𝐬 ⚡`*_",
     premium: "> ╰➤ |𝐀𝐯𝐢𝐬𝐨| *`🔑 𝐍𝐎 𝐄𝐑𝐄𝐒 𝐔𝐒𝐔𝐀𝐑𝐈𝐎 𝐏𝐑𝐄𝐌𝐈𝐔𝐌 𝐇𝐀𝐁𝐋𝐀 𝐂𝐎𝐍 𝐌𝐈 𝐂𝐑𝐄𝐀𝐃𝐎𝐑`*_",
     group: "> ╰➤ |𝐀𝐯𝐢𝐬𝐨|  _*`↘️ 𝐄𝐒𝐓𝐄 𝐂𝐎𝐌𝐀𝐍𝐃𝐎́ 𝐒𝐎𝐋𝐎 𝐅𝐔𝐍𝐂𝐈𝐎𝐍𝐀 𝐄𝐍 𝐆𝐑𝐔𝐏𝐎𝐒`*_",
@@ -413,21 +413,27 @@ export async function handler(chatUpdate) {
     const conn = global.conn
     m = smsg(conn, m)
     
-    // --- Lógica de Base de datos y Permisos segura ---
+    // --- Lógica de Base de datos y Permisos adaptada para arrays de arrays ---
     const _user = global.db?.data?.users?.[m.sender] || {}
     const sendNum = (m?.sender || '').replace(/[^0-9]/g, '')
     
-    // Validamos estrictamente que las listas globales sean arrays antes de iterar
-    const ownersList = Array.isArray(global.owner) ? global.owner.map(v => (Array.isArray(v) ? v[0] : v)) : []
-    const modsList = Array.isArray(global.mods) ? global.mods : []
-    const premsList = Array.isArray(global.prems) ? global.prems : []
+    // Mapea correctamente si global.owner contiene sub-arrays como ["número", "tag"]
+    const ownersList = Array.isArray(global.owner) 
+      ? global.owner.map(v => (Array.isArray(v) ? v[0] : v)) 
+      : []
+    const modsList = Array.isArray(global.mods) 
+      ? global.mods.map(v => (Array.isArray(v) ? v[0] : v)) 
+      : []
+    const premsList = Array.isArray(global.prems) 
+      ? global.prems.map(v => (Array.isArray(v) ? v[0] : v)) 
+      : []
 
     const botJidDecoded = conn?.user?.id ? conn.decodeJid(conn.user.id) : ''
-    const isROwner = [botJidDecoded, ...ownersList].map(v => (v || '').replace(/[^0-9]/g, '')).includes(sendNum)
+    const isROwner = [botJidDecoded, ...ownersList].map(v => String(v || '').replace(/[^0-9]/g, '')).includes(sendNum)
     
     const isOwner = isROwner || m.fromMe
-    const isMods = isOwner || modsList.map(v => (v || '').replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
-    const isPrems = isROwner || premsList.map(v => (v || '').replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || _user.prem == true
+    const isMods = isOwner || modsList.map(v => String(v || '').replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
+    const isPrems = isROwner || premsList.map(v => String(v || '').replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || _user.prem == true
 
     if (global.opts && global.opts['queque'] && m.text && !(isMods || isPrems)) {
       let queque = this.msgqueque || []
