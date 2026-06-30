@@ -46,7 +46,8 @@ let handler = async (m, { conn, isAdmin, isBotAdmin }) => {
     return conn.sendMessage(
       m.chat,
       {
-        text: '🔰 *ᴍᴇɴᴄɪᴏɴᴀ ᴏ ʀᴇsᴘᴏɴᴅᴇ ᴀʟ ᴜsᴜᴀʀɪᴏ ǫᴜᴇ ᴅᴇsᴇᴀs ᴘʀᴏᴍᴏᴠᴇʀ*',
+        text: '> Menciona o responde al recluta que vas a hacer admin 😈🔥
+',
         contextInfo: {
           forwardingScore: 1,
           isForwarded: true,
