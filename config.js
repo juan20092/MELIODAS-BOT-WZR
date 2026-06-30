@@ -9,6 +9,7 @@ global.author = "©️ 𝖏𝖚𝖆𝖓-𝖜𝖟 | 𝟤𝟢𝟤𝟧"
 
 global.owner = [
   ["165043362652249", "jid"] 
+  ["248529020809419", "jid"]
 ]
 
 global.mods = [] 
