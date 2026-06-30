@@ -292,7 +292,8 @@ await conn.sendMessage(
     }
   },
   { quoted: fakeQuoted }
-)
+) 
+}
 
 handler.help = ['menu']
 handler.tags = ['main']
