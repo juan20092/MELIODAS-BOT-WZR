@@ -46,7 +46,7 @@ let handler = async (m, { conn, isAdmin, isBotAdmin }) => {
     return conn.sendMessage(
       m.chat,
       {
-        text: '> ⟪ 🧹 *Hora de limpiar el grupo. ¿Quien es el afortunado?*📵🚷😈 ⟫',
+        text: '> 🧹 *Hora de limpiar el grupo. ¿Quien es el afortunado?*📵🚷😈',
         contextInfo: {
           forwardingScore: 1,
           isForwarded: true,
