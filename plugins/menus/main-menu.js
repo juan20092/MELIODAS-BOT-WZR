@@ -49,9 +49,9 @@ const uptime = clockString(process.uptime() * 1000)
     console.error(e)
   }
 
-  let menu = `╭━━━━━━━━━━━╮
-      ❖ 𝑴𝑬𝑳𝑰𝑶𝑫𝑨𝑺 𝑩𝑶𝑻 ❖
-╰━━━━━━━━━━━╯
+  let menu = `╔═══≪ °❈° ≫═══╗
+        𝑴𝑬𝑳𝑰𝑶𝑫𝑨𝑺 𝑩𝑶𝑻
+╚═══≪ °❈° ≫═══╝
 
 ➥ ⋄ 𝐔𝐬𝐮𝐚𝐫𝐢𝐨 : @${m.sender.split('@')[0]}
 
