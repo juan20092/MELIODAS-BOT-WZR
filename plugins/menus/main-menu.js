@@ -17,8 +17,13 @@ const uptime = clockString(process.uptime() * 1000)
 
   const labelTest = "𝐌𝐄𝐋𝐈𝐎𝐃𝐀𝐒 - 𝐁𝐎𝐓"
   const imgUrl = "https://cdn.dix.lat/me/b0216efd-5f4a-4f5a-97bf-b62a81d10014.jpg"
-  const videoUrl = "https://cdn.dix.lat/me/be57966c-c848-4b75-ae07-89b3ddde95a4.mp4"
-
+  const videoUrl = 
+  "https://cdn.dix.lat/me/be57966c-c848-4b75-ae07-89b3ddde95a4.mp4",
+  "https://cdn.dix.lat/me/a1ec69ee-cca1-49f0-8c28-d094d38c6100.mp4",
+  "https://cdn.dix.lat/me/b267_096653ac-1af3-4df7-b905-ebd2968884fa",
+  "https://cdn.dix.lat/me/d37020a7-1f48-4d12-816e-1b289b31412a.mp4",
+  "https://cdn.dix.lat/me/fe8060a6-7147-40d9-9c83-7da1c9623593.mp4"
+  
   let fakeQuoted = m
 
   try {
