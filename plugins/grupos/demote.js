@@ -45,9 +45,9 @@ let handler = async (m, { conn, isAdmin, isBotAdmin }) => {
 
   // --- DISEÑO: SI FALTA EL USUARIO OBJETIVO ---
   if (!target) {
-    const textFalta = `⚡ *『 ACCIÓN REQUERIDA 』* ⚡\n\n` +
-                      `❌ *Error:* No se detectó a ningún usuario.\n\n` +
-                      `> 🛡️ Por favor, *responde a un mensaje* o *menciona a un @user* que desees remover del cargo de Administrador.`
+    const textFalta = `*『 ACCIÓN REQUERIDA 』* \n\n` +
+      
+                      `> 🛡️ *responde a un mensaje o menciona a un @user que desees remover del cargo de Administrador*`
 
     return conn.sendMessage(
       m.chat,
