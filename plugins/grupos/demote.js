@@ -47,7 +47,7 @@ let handler = async (m, { conn, isAdmin, isBotAdmin }) => {
   if (!target) {
     const textFalta = `*『 ACCIÓN REQUERIDA 』* \n\n` +
       
-                      `> 🛡️ *responde a un mensaje o menciona a un @user que desees remover del cargo de Administrador*`
+                      `> *responde a un mensaje o menciona a un @user que desees remover del cargo de Administrador* 🛡️`
 
     return conn.sendMessage(
       m.chat,
