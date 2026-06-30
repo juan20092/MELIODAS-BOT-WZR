@@ -61,14 +61,12 @@ let handler = async (m, { conn, isAdmin, isBotAdmin }) => {
     )
   }
 
-  // Promueve al usuario en el grupo
   await conn.groupParticipantsUpdate(
     m.chat,
     [target],
     'promote'
   )
 
-  // Reacción de éxito
   await conn.sendMessage(m.chat, {
     react: {
       text: '✅',
