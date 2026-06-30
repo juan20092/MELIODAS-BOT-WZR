@@ -77,7 +77,7 @@ let handler = async (m, { conn, isAdmin, isBotAdmin }) => {
   await conn.sendMessage(
     m.chat,
     {
-      text: `> *@${target.split('@')[0]} ¡Ahora es parte del equipo de admins!* 👑😈🔥`,
+      text: `> *@${target.split('@')[0]} ¡Ahora es parte del equipo de admins!* 😈🔥`,
       contextInfo: {
         mentionedJid: [target], 
         forwardingScore: 1,
