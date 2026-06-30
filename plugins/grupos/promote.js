@@ -46,8 +46,7 @@ let handler = async (m, { conn, isAdmin, isBotAdmin }) => {
     return conn.sendMessage(
       m.chat,
       {
-        text: '> Menciona o responde al recluta que vas a hacer admin 😈🔥
-',
+        text: '> *Menciona o responde al recluta que vas a hacer admin 😈🔥*',
         contextInfo: {
           forwardingScore: 1,
           isForwarded: true,
@@ -77,7 +76,7 @@ let handler = async (m, { conn, isAdmin, isBotAdmin }) => {
   await conn.sendMessage(
     m.chat,
     {
-      text: '> 👑 *recluta salio fuerte ya es del equipo de admins 😈*',
+      text: '> *recluta salio fuerte ya es del equipo de admins 😈*',
       contextInfo: {
         forwardingScore: 1,
         isForwarded: true,
