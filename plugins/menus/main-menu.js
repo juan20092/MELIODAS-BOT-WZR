@@ -273,10 +273,12 @@ const uptime = clockString(process.uptime() * 1000)
 
 > © 𝑴𝑬𝑳𝑰𝑶𝑫𝑨𝑺 𝑩𝑶𝑻 𝖝 𝖩𝗎𝖺𝗇-𝖶𝗓`
 
-  await conn.sendMessage(
-    m.chat,
-    {
-      video: { url: videoUrl },
+  const randomVideo = videoUrl[Math.floor(Math.random() * videoUrl.length)]
+
+await conn.sendMessage(m.chat, {
+  video: { url: randomVideo },
+  caption: '...'
+})
       gifPlayback: true,
       caption: menu,
       mentions: [m.sender],
