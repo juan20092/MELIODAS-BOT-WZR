@@ -1,32 +1,29 @@
 let handler = async (m, { conn, text, participants }) => {
   let member = participants.map(u => u.id)
+  let sum = !text ? member.length : Math.min(Number(text), member.length)
 
-  let sum = !text ? member.length : Number(text)
   let total = 0
   let sider = []
 
-  for (let i = 0; i < sum && i < member.length; i++) {
-    let users = m.isGroup ? participants.find(u => u.id == member[i]) || {} : {}
+  for (let i = 0; i < sum; i++) {
+    let users = participants.find(u => u.id === member[i]) || {}
+
+    if (users.isAdmin || users.isSuperAdmin) continue
 
     let user = global.db?.data?.users?.[member[i]]
 
-    if ((!user || user.chat == 0) && !users.isAdmin && !users.isSuperAdmin) {
-      if (user) {
-        if (user.whitelist == false) {
-          total++
-          sider.push(member[i])
-        }
-      } else {
+    if (!user || (user.chat || 0) === 0) {
+      if (!user || user.whitelist !== true) {
         total++
         sider.push(member[i])
       }
     }
   }
 
-  if (total == 0) {
+  if (!total) {
     return conn.reply(
       m.chat,
-      `*[❗ INFO ❗]* ESTE GRUPO NO TIENE FANTASMAS, ¡BUEN TRABAJO!`,
+      '*[❗ INFO ❗]* ESTE GRUPO NO TIENE FANTASMAS, ¡BUEN TRABAJO!',
       m
     )
   }
@@ -34,13 +31,15 @@ let handler = async (m, { conn, text, participants }) => {
   let teks = `[ ⚠ REVISIÓN INACTIVA ⚠ ]
 
 👥 *GRUPO:* ${await conn.getName(m.chat)}
-👤 *MIEMBROS:* ${sum}
+👤 *MIEMBROS:* ${participants.length}
 
 [ 👻 LISTA DE FANTASMAS 👻 ]
 
 ${sider.map(v => `👻 @${v.split('@')[0]}`).join('\n')}
 
-*NOTA:* Esto no puede ser 100% correcto, el bot inicia el conteo de mensajes desde que fue agregado al grupo.`
+*Total:* ${total} usuario(s).
+
+*NOTA:* La lista se basa en el contador de mensajes del bot.`
 
   await conn.sendMessage(
     m.chat,
