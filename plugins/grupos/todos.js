@@ -17,9 +17,8 @@ let handler = async (m, { isOwner, isAdmin, conn, participants, args }) => {
 ⎔ 𝗠𝗶𝗲𝗺𝗯𝗿𝗼𝘀  : ${participants.length}
 ⎔ 𝗛𝗼𝗿𝗮       : ${new Date().toLocaleTimeString('es-CO', { timeZone: 'America/Bogota' })}
 
-╭──────────⬣
-    📢 𝗠𝗜𝗘𝗠𝗕𝗥𝗢𝗦 !
-╰──────────⬣
+
+📢 𝗠𝗜𝗘𝗠𝗕𝗥𝗢𝗦 📢
 
 `
 
