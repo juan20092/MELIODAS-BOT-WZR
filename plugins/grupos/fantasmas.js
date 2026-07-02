@@ -8,11 +8,15 @@ let handler = async (m, { conn, text, participants }) => {
   for (let i = 0; i < sum; i++) {
     let users = participants.find(u => u.id === member[i]) || {}
 
+    // Saltarse a los administradores
     if (users.isAdmin || users.isSuperAdmin) continue
 
+    // Verificar de forma segura si el usuario existe en la base de datos
     let user = global.db?.data?.users?.[member[i]]
 
-    if (!user || (user.chat || 0) === 0) {
+    // Si el usuario no existe en la BD o su contador de chat es 0
+    if (!user || !user.chat || user.chat === 0) {
+      // Validar que no esté en la lista blanca (whitelist)
       if (!user || user.whitelist !== true) {
         total++
         sider.push(member[i])
@@ -20,10 +24,11 @@ let handler = async (m, { conn, text, participants }) => {
     }
   }
 
-  if (!total) {
+  // Si después del bucle el array de fantasmas está vacío
+  if (total === 0 || sider.length === 0) {
     return conn.reply(
       m.chat,
-      '*[❗ INFO ❗]* ESTE GRUPO NO TIENE FANTASMAS, ¡BUEN TRABAJO!',
+      '*[❗ INFO ❗]* ¡ESTE GRUPO NO TIENE FANTASMAS! Todos los miembros están activos. 😎',
       m
     )
   }
@@ -39,7 +44,7 @@ ${sider.map(v => `👻 @${v.split('@')[0]}`).join('\n')}
 
 *Total:* ${total} usuario(s).
 
-*NOTA:* La lista se basa en el contador de mensajes del bot.`
+*NOTA:* La lista se basa en los usuarios que no tienen registro de mensajes en el bot.`
 
   await conn.sendMessage(
     m.chat,
