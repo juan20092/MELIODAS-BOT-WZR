@@ -36,7 +36,7 @@ let handler = async (m, { conn }) => {
     console.error('Error al crear el Fake Chat:', err)
   }
 
-  let texto = '> ⚠️ *¡Ey! Selecciona o responde al mensaje que quieres eliminar para usar la espada Oscura* 😈🫵🏻'
+  let texto = '> *𝙴𝚢 𝚂𝚎𝚕𝚎𝚌𝚌𝚒𝚘𝚗𝚊 𝚘 𝚛𝚎𝚜𝚙𝚘𝚗𝚍𝚎 𝚊𝚕 𝚖𝚎𝚗𝚜𝚊𝚓𝚎 𝚚𝚞𝚎 𝚚𝚞𝚒𝚎𝚛𝚎𝚜 𝚎𝚕𝚒𝚖𝚒𝚗𝚊𝚛* 😈🫵🏻'
 
   if (!m.quoted) {
     return conn.sendMessage(
@@ -77,7 +77,7 @@ let handler = async (m, { conn }) => {
       return conn.sendMessage(
         m.chat,
         {
-          text: '❌ *ɴᴏ sᴇ ᴘᴜᴅᴏ ᴇʟɪᴍɪɴᴀʀ ᴇʟ ᴍᴇɴsᴀᴊᴇ*',
+          text: '🚫 *ɴᴏ sᴇ ᴘᴜᴅᴏ ᴇʟɪᴍɪɴᴀʀ ᴇʟ ᴍᴇɴsᴀᴊᴇ*',
           contextInfo: {
             forwardingScore: 1,
             isForwarded: true,
