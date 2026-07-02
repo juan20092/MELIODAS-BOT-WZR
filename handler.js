@@ -417,6 +417,15 @@ export async function handler(chatUpdate) {
     const _user = global.db?.data?.users?.[m.sender] || {}
     const sendNum = (m?.sender || '').replace(/[^0-9]/g, '')
     
+    if (!global.db.data.users[m.sender])
+  global.db.data.users[m.sender] = {}
+
+  if (typeof global.db.data.users[m.sender].chat !== 'number')
+  global.db.data.users[m.sender].chat = 0
+
+global.db.data.users[m.sender].chat++
+}
+    
     const ownersList = Array.isArray(global.owner) 
       ? global.owner.map(v => (Array.isArray(v) ? v[0] : v)) 
       : []
