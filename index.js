@@ -5,6 +5,53 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 import './config.js'
 
 import fs, { readdirSync, existsSync, mkdirSync, readFileSync, watch } from 'fs'
+global.db = {
+
+  data: {
+
+    users: {},
+
+    chats: {},
+
+    groups: {}
+
+  }
+
+}
+
+// 2. Cargar si existe
+
+if (fs.existsSync('./database.json')) {
+
+  try {
+
+    global.db.data = JSON.parse(fs.readFileSync('./database.json'))
+
+  } catch (e) {
+
+    console.log('Error cargando DB, usando nueva')
+
+  }
+
+}
+
+// 3. Guardado automático (SIEMPRE fuera del if)
+
+setInterval(() => {
+
+  if (global.db?.data) {
+
+    fs.writeFileSync(
+
+      './database.json',
+
+      JSON.stringify(global.db.data, null, 2)
+
+    )
+
+  }
+
+}, 30000)
 import path, { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { format } from 'util'
