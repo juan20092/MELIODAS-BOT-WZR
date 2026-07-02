@@ -5,6 +5,13 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 import './config.js'
 
 import fs, { readdirSync, existsSync, mkdirSync, readFileSync, watch } from 'fs'
+global.db = {
+  data: {
+    users: {},
+    chats: {},
+    groups: {}
+  }
+}
 import path, { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { format } from 'util'
