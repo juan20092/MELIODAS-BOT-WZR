@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { unmuteUser, isMuted } from '../../lib/mute.js'
+import { unmuteUser, isMuted } from '../../wzr/mute.js'
 
 let handler = async (m, { conn, isAdmin, isBotAdmin }) => {
   if (!isAdmin) return global.dfail("admin", m, conn)
