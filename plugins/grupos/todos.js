@@ -1,36 +1,79 @@
-/**
- * @Author: Meliodas Bot Team
- * @Description: Comando Tagall / Invocación optimizado y funcional.
- */
+import axios from 'axios'
 
 let handler = async (m, { isOwner, isAdmin, conn, participants, args }) => {
-  // Validación de seguridad
   if (!(isAdmin || isOwner)) {
     global.dfail('admin', m, conn)
     throw false
   }
 
-  // Reacción de procesamiento
-  await m.react('👀')
+  await m.react('✅')
 
-  const pesan = args.join(' ') || 'Sin mensaje específico.'
-  const totalMiembros = participants.length
+  let pesan = args.join(' ')
 
-  // Tu diseño original fluido, limpio y estético
-  let teks = `🗣️  *𝗜𝗡𝗩𝗢𝗖𝗔𝗖𝗜𝗢𝗡 𝗚𝗘𝗡𝗘𝗥𝗔𝗟 !*\n\n`
-  teks += `  >> 📩 *𝙈𝙀𝙉𝙎𝘼𝙅𝙀 :* ${pesan}\n`
-  teks += `  >> 👥 *𝙈𝙄𝙀𝙈𝘽𝙍𝙊𝙎 :* [ ${totalMiembros} ]\n\n`
-  teks += `───────────────────\n\n`
+  let teks = `
+╭━━━━━━━━━━━━━━━━━━━━━━⬣
+│          ⚡ 𝗜𝗡𝗩𝗢𝗖𝗔𝗖𝗜𝗢𝗡 ⚡
+╰━━━━━━━━━━━━━━━━━━━━━━⬣
 
-  // Lista de miembros
-  for (let mem of participants) {
-    teks += ` 🐉  @${mem.id.split('@')[0]}\n`
+⎔ 𝗚𝗿𝘂𝗽𝗼      : ${await conn.getName(m.chat)}
+⎔ 𝗔𝗱𝗺𝗶𝗻      : @${m.sender.split('@')[0]}
+⎔ 𝗠𝗶𝗲𝗺𝗯𝗿𝗼𝘀  : ${participants.length}
+⎔ 𝗛𝗼𝗿𝗮       : ${new Date().toLocaleTimeString('es-CO', { timeZone: 'America/Bogota' })}
+
+╭───────────────⬣
+│ 💬 𝗠𝗘𝗡𝗦𝗔𝗝𝗘
+╰───────────────⬣
+
+${pesan || 'Sin mensaje.'}
+
+╭───────────────⬣
+│ 📢 𝗠𝗜𝗘𝗠𝗕𝗥𝗢𝗦
+╰───────────────⬣
+
+`
+
+  for (const user of participants) {
+    teks += `◈ @${user.id.split('@')[0]}\n`
   }
 
-  teks += `\n───────────────────\n`
-  teks += `> 𝙈𝙀𝙇𝙄𝙊𝘿𝘼𝙎 𝘽𝙊𝙏`
+  teks += `
+╰━━━━━━━━━━━━━━━━━━━━━━⬣
+> ⚡ 𝗠𝗘𝗟𝗜𝗢𝗗𝗔𝗦 𝗕𝗢𝗧 • 𝗚𝗥𝗢𝗨𝗣 𝗦𝗬𝗦𝗧𝗘𝗠
+`
 
-  // Envío seguro y directo al chat
+  const labelTest = "𝐌𝐄𝐋𝐈𝐎𝐃𝐀𝐒 - 𝐁𝐎𝐓"
+  const imgUrl = "https://cdn.dix.lat/me/b0216efd-5f4a-4f5a-97bf-b62a81d10014.jpg"
+
+  let fakeQuoted = m
+
+  try {
+    const response = await axios.get(imgUrl, {
+      responseType: 'arraybuffer'
+    }).catch(() => null)
+
+    if (response) {
+      const thumbBuffer = response.data
+
+      fakeQuoted = {
+        key: {
+          participant: '0@s.whatsapp.net',
+          remoteJid: 'status@broadcast',
+          fromMe: false,
+          id: 'KiritoTest'
+        },
+        message: {
+          locationMessage: {
+            name: labelTest,
+            jpegThumbnail: thumbBuffer
+          }
+        },
+        participant: '0@s.whatsapp.net'
+      }
+    }
+  } catch (err) {
+    console.error('Error al crear el Fake Chat:', err)
+  }
+
   await conn.sendMessage(
     m.chat,
     {
@@ -41,24 +84,14 @@ let handler = async (m, { isOwner, isAdmin, conn, participants, args }) => {
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
           newsletterJid: global.ch || '120363419404216418@newsletter',
-          newsletterName: '↯ 𝘔𝘌𝘓𝘐𝘖𝘋𝘈𝘚 𝘉放𝘛 - 𝘊𝘏𝘈𝘕𝘕𝘌𝘓'
-        },
-        // Aquí se renderiza tu imagen de forma nativa arriba del texto (Estilo Premium)
-        externalAdReply: {
-          title: 'ＭＥＬＩＯＤＡＳ  ＢＯＴ',
-          body: '📢 ¡Invocación General del Staff!',
-          mediaType: 1,
-          previewType: 0,
-          renderLargerThumbnail: true, // Cambia a false si prefieres la miniatura pequeña
-          thumbnailUrl: 'https://cdn.dix.lat/me/b0216efd-5f4a-4f5a-97bf-b62a81d10014.jpg',
-          sourceUrl: 'https://atom.bio/meliodas-bot'
+          newsletterName: '↯ 𝘔𝘌𝘓𝘐𝘖𝘋𝘈𝘚 𝘉𝘖𝘛 - 𝘊𝘏𝘈𝘕𝘕𝘌𝘓 𝟮𝟬𝟮𝟯'
         }
       }
     },
-    { quoted: m } // Usamos el mensaje original para evitar que WhatsApp lo bloquee
+    {
+      quoted: fakeQuoted
+    }
   )
-  
-  await m.react('✅')
 }
 
 handler.command = /^(tagall|invocar|invocacion|todos|invocación)$/i
