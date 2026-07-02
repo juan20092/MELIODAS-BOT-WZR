@@ -5,13 +5,6 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 import './config.js'
 
 import fs, { readdirSync, existsSync, mkdirSync, readFileSync, watch } from 'fs'
-global.db = {
-  data: {
-    users: {},
-    chats: {},
-    groups: {}
-  }
-}
 import path, { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { format } from 'util'
@@ -41,6 +34,14 @@ import qrcode from 'qrcode-terminal'
 import { makeWASocket, smsg } from './wzr/simple.js'
 import store from './wzr/store.js'
 import { logMessages } from './wzr/logger.js'
+
+global.db = {
+  data: {
+    users: {},
+    chats: {},
+    groups: {}
+  }
+}
 
 const muteConsolePatterns = [/^\s*Closing session:/i, /SessionEntry\s*\{/i]
 const shouldMuteConsole = (...args) => {
