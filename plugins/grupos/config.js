@@ -6,7 +6,7 @@ let stickerPath = path.join(process.cwd(), "media", "grupo.webp")
 
 async function ensureSticker() {
   if (!fs.existsSync(stickerPath)) {
-    let { data } = await axios.get("https://cdn.russellxz.click/143ef76a.jpg", {
+    let { data } = await axios.get("https://cdn.dix.lat/me/b0216efd-5f4a-4f5a-97bf-b62a81d10014.jpg", {
       responseType: "arraybuffer"
     })
     fs.mkdirSync(path.dirname(stickerPath), { recursive: true })
