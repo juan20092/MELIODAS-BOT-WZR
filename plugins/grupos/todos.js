@@ -10,16 +10,16 @@ let handler = async (m, { isOwner, isAdmin, conn, participants, args }) => {
 
   let pesan = args.join(' ')
 
-  let teks = let teks = `*!  MENCION GENERAL  !*\n\n╭  ┄ 𝅄 ۪꒰ \`⡞᪲=͟͟͞${global.botName || '𝘔𝘌𝘓𝘐𝘖𝘋𝘈𝘚－𝘉𝘖𝘛'}≼᳞ׄ\` ꒱ ۟ 𝅄 ┄\n`
+  let teks = `*!  MENCION GENERAL  !*\n\n╭  ┄ 𝅄 ۪꒰ \`⡞᪲=͟͟͞${global.botName || '𝘔𝘌𝘓𝘐𝘖𝘋𝘈𝘚－𝘉𝘖𝘛'}≼᳞ׄ\` ꒱ ۟ 𝅄 ┄\n`
 
 ⎔ 𝗚𝗿𝘂𝗽𝗼      : ${await conn.getName(m.chat)}
 ⎔ 𝗔𝗱𝗺𝗶𝗻      : @${m.sender.split('@')[0]}
 ⎔ 𝗠𝗶𝗲𝗺𝗯𝗿𝗼𝘀  : ${participants.length}
 ⎔ 𝗛𝗼𝗿𝗮       : ${new Date().toLocaleTimeString('es-CO', { timeZone: 'America/Bogota' })}
 
-╭──────────⬣
-    📢 𝗠𝗜𝗘𝗠𝗕𝗥𝗢𝗦 !
-╰──────────⬣
+
+📢 𝗠𝗜𝗘𝗠𝗕𝗥𝗢𝗦 📢
+
 
 `
 
