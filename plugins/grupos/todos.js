@@ -12,7 +12,7 @@ let handler = async (m, { isOwner, isAdmin, conn, participants, args }) => {
 
   let teks = `
 ╭──────────⬣
-│  🗣️ 𝗜𝗡𝗩𝗢𝗖𝗔𝗖𝗜𝗢𝗡 𝗚𝗘𝗡𝗘𝗥𝗔𝗟!
+   🗣️ 𝗜𝗡𝗩𝗢𝗖𝗔𝗖𝗜𝗢𝗡 𝗚𝗘𝗡𝗘𝗥𝗔𝗟!
 ╰──────────⬣
 
 ⎔ 𝗚𝗿𝘂𝗽𝗼      : ${await conn.getName(m.chat)}
@@ -21,7 +21,7 @@ let handler = async (m, { isOwner, isAdmin, conn, participants, args }) => {
 ⎔ 𝗛𝗼𝗿𝗮       : ${new Date().toLocaleTimeString('es-CO', { timeZone: 'America/Bogota' })}
 
 ╭──────────⬣
-│ 📢 𝗠𝗜𝗘𝗠𝗕𝗥𝗢𝗦
+    📢 𝗠𝗜𝗘𝗠𝗕𝗥𝗢𝗦 !
 ╰──────────⬣
 
 `
@@ -31,7 +31,6 @@ let handler = async (m, { isOwner, isAdmin, conn, participants, args }) => {
   }
 
   teks += `
-╰━━━━━━━━━━━━⬣
 > 🔰 𝘔𝘌𝘓𝘐𝘖𝘋𝘈𝘚 𝘉𝘖𝘛
 `
 
